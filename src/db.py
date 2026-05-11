@@ -10,7 +10,18 @@ from src.config import Config
 
 class Database:
     def __init__(self):
-        self.conn = psycopg2.connect(Config.dsn())
+        self._connect()
+
+    def _connect(self):
+        # Docker Desktop on Windows kills idle TCP after embed batches; we
+        # additionally retry-on-OperationalError below.
+        self.conn = psycopg2.connect(
+            Config.dsn(),
+            keepalives=1,
+            keepalives_idle=30,
+            keepalives_interval=10,
+            keepalives_count=5,
+        )
         self.conn.autocommit = True
         register_vector(self.conn)
 
@@ -57,21 +68,29 @@ class Database:
 
     def insert_chunks_batch(self, rows: List[tuple]) -> None:
         """rows = list of (file_path, file_hash, chunk_index, heading_path, content, token_count, embedding)"""
-        with self.conn.cursor() as cur:
-            cur.executemany(
-                """
-                INSERT INTO chunks (file_path, file_hash, chunk_index, heading_path,
-                                    content, token_count, embedding)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-                ON CONFLICT (file_path, chunk_index) DO UPDATE
-                SET file_hash = EXCLUDED.file_hash,
-                    heading_path = EXCLUDED.heading_path,
-                    content = EXCLUDED.content,
-                    token_count = EXCLUDED.token_count,
-                    embedding = EXCLUDED.embedding
-                """,
-                rows,
-            )
+        sql = """
+            INSERT INTO chunks (file_path, file_hash, chunk_index, heading_path,
+                                content, token_count, embedding)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (file_path, chunk_index) DO UPDATE
+            SET file_hash = EXCLUDED.file_hash,
+                heading_path = EXCLUDED.heading_path,
+                content = EXCLUDED.content,
+                token_count = EXCLUDED.token_count,
+                embedding = EXCLUDED.embedding
+        """
+        try:
+            with self.conn.cursor() as cur:
+                cur.executemany(sql, rows)
+        except psycopg2.OperationalError:
+            # Connection died (Windows TCP reset after long embed); reconnect once.
+            try:
+                self.conn.close()
+            except Exception:
+                pass
+            self._connect()
+            with self.conn.cursor() as cur:
+                cur.executemany(sql, rows)
 
     def get_file_hashes(self) -> Dict[str, str]:
         """Return {file_path: file_hash} for all currently-stored files."""

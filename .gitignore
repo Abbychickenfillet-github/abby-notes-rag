@@ -28,3 +28,6 @@ Thumbs.db
 
 # HuggingFace cache (if downloaded into project)
 .cache/
+
+# Ingest run logs
+ingest_run.log
