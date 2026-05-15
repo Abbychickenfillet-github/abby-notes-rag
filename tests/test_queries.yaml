@@ -1,0 +1,32 @@
+# Validation queries: each query should find at least one matching expected file in top-k.
+# Pass criterion: >= 80% of queries hit (>= 8/10).
+queries:
+  - q: "Docker AutoMigrate 失敗怎麼處理？"
+    expect_any_of: ["MEMORY.md", "AutoMigrate"]
+
+  - q: "pointerEvents auto 跟 none 差別"
+    expect_any_of: ["chakra-css-notes", "MEMORY.md"]
+
+  - q: "Go 的 goroutine 怎麼寫"
+    expect_any_of: ["golang-concurrency"]
+
+  - q: "Redis SCAN 跟 KEYS 的差別"
+    expect_any_of: ["redis-guide"]
+
+  - q: "pgvector 怎麼建立 HNSW 索引"
+    expect_any_of: ["pgvector-setup", "RAG/"]
+
+  - q: "embedding model 跟 vector database 差別"
+    expect_any_of: ["RAG/", "embedding"]
+
+  - q: "Booth 訂單買方公司限制"
+    expect_any_of: ["booth-order-rules", "MEMORY.md"]
+
+  - q: "Event Coupon ClaimPeriod 有哪些值"
+    expect_any_of: ["MEMORY.md", "event_coupon"]
+
+  - q: "git push 應該追蹤哪個遠端分支"
+    expect_any_of: ["feedback-git-push", "MEMORY.md"]
+
+  - q: "為什麼不要在 UI 顯示 UUID"
+    expect_any_of: ["feedback-no-uuid", "MEMORY.md"]
