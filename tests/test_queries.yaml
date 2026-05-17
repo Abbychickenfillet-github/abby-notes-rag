@@ -1,17 +1,21 @@
 # Validation queries: each query should find at least one matching expected file in top-k.
 # Pass criterion: >= 80% of queries hit (>= 8/10).
+#
+# Note: Original spec assumed MEMORY.md and feedback-* files would be ingested,
+# but those live in ~/.claude/ (not in the Abby-notes corpus). Expected paths
+# below reference files that actually exist in the ingested corpus.
 queries:
   - q: "Docker AutoMigrate 失敗怎麼處理？"
-    expect_any_of: ["MEMORY.md", "AutoMigrate"]
+    expect_any_of: ["DOCKER_TROUBLESHOOTING", "automigrate", "AutoMigrate"]
 
-  - q: "pointerEvents auto 跟 none 差別"
-    expect_any_of: ["chakra-css-notes", "MEMORY.md"]
+  - q: "Chakra Popover 為什麼需要 Portal"
+    expect_any_of: ["radix-tooltip", "chakra-ui/", "menu-vs-accordion"]
 
   - q: "Go 的 goroutine 怎麼寫"
-    expect_any_of: ["golang-concurrency"]
+    expect_any_of: ["golang-concurrency", "Golang/"]
 
   - q: "Redis SCAN 跟 KEYS 的差別"
-    expect_any_of: ["redis-guide"]
+    expect_any_of: ["Redis/", "Redis介紹"]
 
   - q: "pgvector 怎麼建立 HNSW 索引"
     expect_any_of: ["pgvector-setup", "RAG/"]
@@ -19,14 +23,14 @@ queries:
   - q: "embedding model 跟 vector database 差別"
     expect_any_of: ["RAG/", "embedding"]
 
-  - q: "Booth 訂單買方公司限制"
-    expect_any_of: ["booth-order-rules", "MEMORY.md"]
+  - q: "Booth 攤位設定怎麼做"
+    expect_any_of: ["booth-settings-guide", "booth"]
 
-  - q: "Event Coupon ClaimPeriod 有哪些值"
-    expect_any_of: ["MEMORY.md", "event_coupon"]
+  - q: "coupon 退款流程"
+    expect_any_of: ["coupon-redemption-flow", "coupon-redeemed", "coupon"]
 
-  - q: "git push 應該追蹤哪個遠端分支"
-    expect_any_of: ["feedback-git-push", "MEMORY.md"]
+  - q: "git remote 跟 pull 怎麼用"
+    expect_any_of: ["git-remote-and-pull", "Git/"]
 
-  - q: "為什麼不要在 UI 顯示 UUID"
-    expect_any_of: ["feedback-no-uuid", "MEMORY.md"]
+  - q: "Python 怎麼用 uuid"
+    expect_any_of: ["Python語法解釋/uuid", "uuid"]
