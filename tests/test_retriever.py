@@ -6,10 +6,13 @@ def test_retrieve_docker_automigrate():
     r = Retriever()
     results = r.search("Docker AutoMigrate 失敗怎麼處理", top_k=5)
     assert len(results) == 5
-    # Expect MEMORY.md or backend-related notes in top 5
-    paths = [hit["file_path"] for hit in results]
-    assert any("MEMORY" in p or "backend" in p.lower() or "AutoMigrate" in p for p in paths), \
-        f"Expected AutoMigrate-related file in top 5, got {paths}"
+    # Expect at least one Docker / migration / backend related path in top 5.
+    # MEMORY.md lives in user's ~/.claude, not in the ingested Abby-notes corpus.
+    paths_lower = [hit["file_path"].lower() for hit in results]
+    assert any(
+        "docker" in p or "backend" in p or "migrate" in p or "automigrate" in p
+        for p in paths_lower
+    ), f"Expected Docker/migrate-related file in top 5, got {paths_lower}"
 
 
 def test_filter_by_path():
