@@ -19,13 +19,21 @@ from src.config import Config
 from src.db import Database
 from src.embedder import Embedder
 
-
+# 消化製造md5指紋密碼
 def md5_of(path: Path) -> str:
     return hashlib.md5(path.read_bytes()).hexdigest()
 
-
+# 得到chunk檔案的相對路徑
 def relative_path(absolute: Path) -> str:
     """Path relative to NOTES_ROOT, with forward slashes."""
+    # 巢狀呼叫從「最內層往外」讀（像剝洋蔥）。
+    # 假設 absolute = C:\coding\futuresign\Abby-notes\RAG\redis-guide.md
+    #   1) absolute.relative_to(Config.NOTES_ROOT)
+    #        砍掉 NOTES_ROOT (C:\...\Abby-notes) 前綴 -> Path("RAG\redis-guide.md")
+    #   2) str(...)             把 Path 物件轉成字串   -> "RAG\redis-guide.md"
+    #   3) .replace("\\", "/")  反斜線換正斜線          -> "RAG/redis-guide.md"
+    # 註：字串裡 "\\" 代表「一條真的反斜線」(\ 是跳脫字元，要寫兩條才算一條)。
+    # 為何這樣存：相對路徑可攜(搬家不壞)、正斜線跨平台一致(Win 用\、Mac/Linux 用/)。
     return str(absolute.relative_to(Config.NOTES_ROOT)).replace("\\", "/")
 
 
