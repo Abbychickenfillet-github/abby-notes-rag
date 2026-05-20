@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
+# config 讀環境變數
 class Config:
     # DB
     POSTGRES_HOST = os.environ["POSTGRES_HOST"]
