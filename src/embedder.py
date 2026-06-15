@@ -44,11 +44,11 @@ class Embedder:
 
     # encode = 主力方法：把一串文字批次轉成向量矩陣。
     # texts: List[str]    一次傳一群句子（chunk）
-    # batch_size: int = 32  一次塞給 GPU/CPU 32 句，太大會 OOM，太小會慢
+    # batch_size: int = 32  一次塞給 GPU/CPU 32 句，太大會 OOM(out-of-memory)需要的batch大過於硬體實際能給的，太小會慢
     # 回傳 np.ndarray：形狀 (N, 1024) 的 float32 矩陣
     def encode(self, texts: List[str], batch_size: int = 32) -> np.ndarray:
         """Encode a list of texts into a (N, dim) float32 matrix (L2-normalized)."""
-
+        """批次大小Batch Size:是機器學習與深度學習中控制單次訓練傳遞給模型樣本數量的超參數"""
         # 真正的推論發生在這裡：model.encode 內部跑 forward pass。
         embeddings = self.model.encode(
             texts,

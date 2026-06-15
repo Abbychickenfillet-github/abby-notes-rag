@@ -37,9 +37,23 @@ def relative_path(absolute: Path) -> str:
     return str(absolute.relative_to(Config.NOTES_ROOT)).replace("\\", "/")
 
 
+# 收集 NOTES_ROOT 底下所有 .md 檔案，回傳一個 Path 的清單(list[Path])。
 def collect_md_files() -> list[Path]:
+    # 這整段 [ ... ] 是「串列推導式 (list comprehension)」：用一行迴圈產生一個 list。
+    # 讀法：對 rglob 找到的每個 p，若通過 if 條件就放進 list。等同下面的展開寫法：
+    #   result = []
+    #   for p in Config.NOTES_ROOT.rglob("*.md"):
+    #       if ".git" not in p.parts:
+    #           result.append(p)
+    #   return result
     return [
+        # rglob = recursive glob，遞迴往「所有子資料夾」尋找符合 pattern 的檔案。
+        # ("*.md" = 任何以 .md 結尾的檔名；r 開頭代表會深入巢狀子目錄，glob 則只看當層)
+        # rglob 回傳「產生器(generator)」，可被 for...in 逐一取出，每個 p 都是 Path 物件。
         p for p in Config.NOTES_ROOT.rglob("*.md")
+        # p.parts 把路徑切成各層的 tuple，例如 ("C:\\", "Abby-notes", ".git", "x.md")。
+        # 「".git" not in p.parts」= 路徑各層都沒有 .git，藉此排除 git 內部檔案。
+        # in / not in 是成員判斷運算子，會逐一檢查可疊代物件(tuple/list/str...)裡有沒有該元素。
         if ".git" not in p.parts
     ]
 

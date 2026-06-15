@@ -21,3 +21,4 @@ python scripts\ingest.py --full
 # 5. Search
 python scripts\search.py "Docker AutoMigrate 失敗怎麼處理"
 ```
+cli是

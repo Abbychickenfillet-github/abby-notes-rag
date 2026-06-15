@@ -28,7 +28,7 @@ OLLAMA_URL = "http://localhost:11434/api/generate"
 
 # 各 provider 的預設 model（--model 留空時用這個）
 DEFAULT_MODELS = {
-    "ollama": "qwen2.5:3b",
+    "ollama": "qwen2.5:7b",
     "gemini": "gemini-2.5-flash",
     "claude": "claude-opus-4-7",
 }
