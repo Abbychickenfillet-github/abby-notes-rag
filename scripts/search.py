@@ -1,3 +1,4 @@
+# 🏃 角色：腳本（script）——直接用 python 執行的「進入點」，內部會 import src/ 的函式庫來用。
 # ▶ 執行順序 [進入點 R2]：純檢索 CLI，回傳最相關的筆記片段（需先完成 R1 ingest）。
 """Semantic search CLI over the ingested Abby-notes chunks.
 

@@ -40,6 +40,29 @@ python scripts\ask.py "我學過哪些程式語言？" --provider ollama
 > 依賴方向：`config` → `chunker` / `embedder` / `db` → `retriever` → scripts。
 > 上層只認識下一層，不直接碰更底層細節（例如 `retriever` 不自己寫 SQL，交給 `db`）。
 
+### 觀念：函式庫（library）vs 腳本（script）
+
+這個專案的檔案分成兩種角色，每個檔頂端都標了 `# 📚 角色` 或 `# 🏃 角色`：
+
+| | 函式庫 / 模組（library/module） | 腳本（script） |
+|---|----------|------|
+| 放哪 | `src/` 資料夾 | `scripts/` 資料夾 |
+| 怎麼用 | **被別的檔 `import`** 來重複使用 | **直接用 `python` 執行** |
+| 像什麼 | 工具箱裡的工具（鎚子、螺絲起子） | 拿工具來做事的「一份作業流程」 |
+| 範例 | `src/embedder.py`（提供「文字→向量」功能） | `scripts/ingest.py`（呼叫 embedder 把筆記建索引） |
+| 自己會跑嗎 | 不會，等別人呼叫 | 會，是你下指令的「進入點」 |
+
+- **函式庫**：寫好一段可重複使用的功能（class / function），自己不會主動執行，
+  要等腳本 `from src.embedder import Embedder` 把它載進去用。
+- **腳本**：你實際在終端機打 `python scripts/ingest.py` 跑的那種檔，
+  它負責「把流程串起來」，過程中會 import `src/` 裡的函式庫來幹活。
+
+> 為什麼要分開？把「功能」(src/) 和「怎麼用功能」(scripts/) 拆開，
+> 同一個 `embedder` 函式庫就能同時被 `ingest`、`search`、`ask` 三個腳本重複使用，不用複製貼上。
+>
+> 技術細節：腳本檔常見的 `if __name__ == "__main__": main()` 就是在說
+> 「只有**被直接執行**時才跑 `main()`；若被別人 import 就不要自動跑」——這正是區分兩者的開關。
+
 ### 11 個檔的執行順序總表
 
 每個檔頂端都有 `# ▶ 執行順序 [...]` 標註。分兩類：

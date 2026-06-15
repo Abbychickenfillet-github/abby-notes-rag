@@ -1,3 +1,4 @@
+# 🏃 角色：腳本（script）——直接用 python 執行的「進入點」，內部會 import src/ 的函式庫來用。
 # ▶ 執行順序 [設定階段・只有第一次]：建立 DB schema；平時不要重跑（DROP TABLE 會清空，需重新 ingest）。
 """Apply init_db.sql to the pgvector container."""
 from pathlib import Path

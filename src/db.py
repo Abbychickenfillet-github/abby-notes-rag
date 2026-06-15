@@ -1,3 +1,4 @@
+# 📚 角色：函式庫（library／模組）——被其他檔 import 來重複使用，不直接用 python 執行。
 # ▶ 執行順序 [函式庫 L4／5]：被 ingest.py（寫入）與 retriever.py（查詢）載入，pgvector CRUD＋cosine 檢索。
 """Thin wrapper over psycopg2 + pgvector for the chunks table."""
 from typing import Any, Dict, List, Optional

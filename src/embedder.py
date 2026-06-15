@@ -1,3 +1,4 @@
+# 📚 角色：函式庫（library／模組）——被其他檔 import 來重複使用，不直接用 python 執行。
 # ▶ 執行順序 [函式庫 L3／5]：被 ingest.py（批次）與 retriever.py（單句 query）載入，文字→1024 維向量。
 """Wrapper around sentence-transformers BAAI/bge-m3 model."""
 

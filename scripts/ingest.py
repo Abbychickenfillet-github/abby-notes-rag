@@ -1,3 +1,4 @@
+# 🏃 角色：腳本（script）——直接用 python 執行的「進入點」，內部會 import src/ 的函式庫來用。
 # ▶ 執行順序 [進入點 R1]：建索引——查詢前必須先跑這個（python scripts/ingest.py --full）。
 """Ingest all .md files under NOTES_ROOT into pgvector.
 

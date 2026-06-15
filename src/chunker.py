@@ -1,3 +1,4 @@
+# 📚 角色：函式庫（library／模組）——被其他檔 import 來重複使用，不直接用 python 執行。
 # ▶ 執行順序 [函式庫 L2／5]：被 ingest.py 載入，把 Markdown 依標題切成 chunk。
 """Markdown header-aware chunker using langchain text splitters."""
 from dataclasses import dataclass

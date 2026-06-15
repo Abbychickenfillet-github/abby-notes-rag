@@ -1,3 +1,4 @@
+# 🏃 角色：腳本（script）——直接用 python 執行的「進入點」，內部會 import src/ 的函式庫來用。
 # ▶ 執行順序 [進入點 R3]：檢索＋LLM 問答（需先完成 R1 ingest；--provider ollama/gemini/claude 三選一）。
 """Ask a question over the Abby-notes RAG corpus (retrieval + LLM generation).
 

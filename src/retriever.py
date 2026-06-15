@@ -1,3 +1,4 @@
+# 📚 角色：函式庫（library／模組）——被其他檔 import 來重複使用，不直接用 python 執行。
 # ▶ 執行順序 [函式庫 L5／5]：被 search.py / ask.py / validate.py 載入，黏合 embedder＋db。
 """High-level search API combining embedder + db."""
 
