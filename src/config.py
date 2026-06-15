@@ -1,3 +1,4 @@
+# ▶ 執行順序 [函式庫 L1／5]：最底層，讀 .env；幾乎所有模組都 import 它，最先被載入。
 """Centralized configuration loaded from .env."""
 import os
 from pathlib import Path

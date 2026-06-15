@@ -1,3 +1,4 @@
+# ▶ 執行順序 [函式庫 L5／5]：被 search.py / ask.py / validate.py 載入，黏合 embedder＋db。
 """High-level search API combining embedder + db."""
 
 # typing 的 4 個工具：

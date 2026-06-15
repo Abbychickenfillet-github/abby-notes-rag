@@ -1,3 +1,4 @@
+# ▶ 執行順序 [進入點 R1]：建索引——查詢前必須先跑這個（python scripts/ingest.py --full）。
 """Ingest all .md files under NOTES_ROOT into pgvector.
 
 Usage:

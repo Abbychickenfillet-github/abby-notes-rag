@@ -1,3 +1,4 @@
+# ▶ 執行順序 [函式庫 L4／5]：被 ingest.py（寫入）與 retriever.py（查詢）載入，pgvector CRUD＋cosine 檢索。
 """Thin wrapper over psycopg2 + pgvector for the chunks table."""
 from typing import Any, Dict, List, Optional
 

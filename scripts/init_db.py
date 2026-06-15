@@ -1,3 +1,4 @@
+# ▶ 執行順序 [設定階段・只有第一次]：建立 DB schema；平時不要重跑（DROP TABLE 會清空，需重新 ingest）。
 """Apply init_db.sql to the pgvector container."""
 from pathlib import Path
 import os

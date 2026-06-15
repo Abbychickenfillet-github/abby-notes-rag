@@ -1,3 +1,4 @@
+# ▶ 執行順序 [進入點 R4]：選用——跑驗證題庫檢查檢索命中率（需先完成 R1 ingest）。
 """Run validation queries and print hit/miss summary.
 
 Usage:

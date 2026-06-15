@@ -1,3 +1,4 @@
+# ▶ 執行順序 [進入點 R2]：純檢索 CLI，回傳最相關的筆記片段（需先完成 R1 ingest）。
 """Semantic search CLI over the ingested Abby-notes chunks.
 
 Usage:

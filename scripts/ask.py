@@ -1,3 +1,4 @@
+# ▶ 執行順序 [進入點 R3]：檢索＋LLM 問答（需先完成 R1 ingest；--provider ollama/gemini/claude 三選一）。
 """Ask a question over the Abby-notes RAG corpus (retrieval + LLM generation).
 
 Phase 3 CLI: retrieve top-k chunks, stuff them into a prompt, let an LLM

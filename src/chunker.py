@@ -1,3 +1,4 @@
+# ▶ 執行順序 [函式庫 L2／5]：被 ingest.py 載入，把 Markdown 依標題切成 chunk。
 """Markdown header-aware chunker using langchain text splitters."""
 from dataclasses import dataclass
 from typing import List

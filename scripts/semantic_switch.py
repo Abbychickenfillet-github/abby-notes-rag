@@ -1,3 +1,4 @@
+# ▶ 執行順序 [進入點 R5]：獨立工具——意圖分類，與 RAG 主線平行（只需 embedder，不需 DB／ingest）。
 """語意 switch：用 embedding 相似度,把使用者的自由文字「分類」到預先定義的 case。
 
 這跟 RAG 的差別：

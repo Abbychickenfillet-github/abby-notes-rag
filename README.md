@@ -40,6 +40,28 @@ python scripts\ask.py "我學過哪些程式語言？" --provider ollama
 > 依賴方向：`config` → `chunker` / `embedder` / `db` → `retriever` → scripts。
 > 上層只認識下一層，不直接碰更底層細節（例如 `retriever` 不自己寫 SQL，交給 `db`）。
 
+### 11 個檔的執行順序總表
+
+每個檔頂端都有 `# ▶ 執行順序 [...]` 標註。分兩類：
+**L = 函式庫**（被 `import`，不直接執行，依依賴載入）、**R = 進入點**（你打指令直接跑）。
+
+| 標記 | 檔案 | 類型 | 說明 |
+|------|------|------|------|
+| L1 | `src/config.py` | 函式庫 | 最底層，讀 `.env`，最先被載入 |
+| L2 | `src/chunker.py` | 函式庫 | 切 Markdown chunk（被 ingest 用） |
+| L3 | `src/embedder.py` | 函式庫 | 文字→向量（被 ingest／retriever 用） |
+| L4 | `src/db.py` | 函式庫 | pgvector CRUD＋檢索（被 ingest／retriever 用） |
+| L5 | `src/retriever.py` | 函式庫 | 黏 embedder＋db（被 search／ask／validate 用） |
+| R1 | `scripts/ingest.py` | 進入點 | **建索引——查詢前必先跑** |
+| R2 | `scripts/search.py` | 進入點 | 純檢索（需先 R1） |
+| R3 | `scripts/ask.py` | 進入點 | 檢索＋LLM 問答（需先 R1） |
+| R4 | `scripts/validate.py` | 進入點 | 選用：驗證檢索命中率（需先 R1） |
+| R5 | `scripts/semantic_switch.py` | 進入點 | 獨立工具：意圖分類（不需 DB／ingest） |
+| — | `scripts/init_db.py` | 設定 | **只有第一次**建 schema，平時不重跑（會清空） |
+
+> 一句話：第一次照 `init_db.py（設定）→ R1 ingest → R2/R3 查詢`；之後每次只要 `R2/R3`。
+> L1–L5 不用自己跑，是被進入點 `import` 進去的。
+
 ### 兩條主流程
 
 **A. 建立索引（離線，`ingest.py`，第一次或更新筆記時跑）**

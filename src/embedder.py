@@ -1,3 +1,4 @@
+# ▶ 執行順序 [函式庫 L3／5]：被 ingest.py（批次）與 retriever.py（單句 query）載入，文字→1024 維向量。
 """Wrapper around sentence-transformers BAAI/bge-m3 model."""
 
 # typing.List 是 Python 內建型別提示工具，讓 List[str] 等寫法被靜態檢查器看懂。
