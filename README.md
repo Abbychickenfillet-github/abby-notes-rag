@@ -12,7 +12,7 @@ docker compose up -d
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 
-# 3. Initialize DB schema
+# 3. Initialize DB schema（只有第一次！見下方說明，重跑會清空資料）
 python scripts\init_db.py
 
 # 4. Ingest notes (~15-30 min first time, downloads bge-m3 ~2.3GB)
@@ -65,3 +65,33 @@ scripts/search.py 或 ask.py
 
 > 關鍵：query 與 chunk 必須用**同一個 embedding model**（bge-m3），
 > 否則兩者落在不同向量空間，cosine 相似度會失準。
+
+## 常見問題
+
+### `init_db.py` 要每次容器 `up` 之後都跑嗎？
+
+**不用，只有第一次（或資料被清掉時）才跑。**
+
+原因：`docker-compose.yml` 把資料庫掛在本地資料夾（bind mount）：
+
+```yaml
+volumes:
+  - ./data:/var/lib/postgresql/data
+```
+
+所以資料**持久保存在 `./data/`**，跨 `docker compose up` / `down` / `restart` 都還在。
+容器重開後，之前 ingest 進去的 chunks 都還在，直接 `search.py` / `ask.py` 即可。
+
+⚠️ **重跑 `init_db.py` 會清空資料！** `init_db.sql` 裡有 `DROP TABLE IF EXISTS chunks CASCADE`，
+重跑等於砍掉重建整張表 → 之前 embed 好的內容全沒了 → 必須重新 `ingest.py --full`。
+
+| 情況 | 要跑 `init_db.py` 嗎？ |
+|------|------------------------|
+| 第一次架設（`data/` 還是空的） | ✅ 要 |
+| 平常 `docker compose up`（`data/` 已有資料） | ❌ 不用 |
+| 容器 restart / 電腦重開 | ❌ 不用 |
+| 手動刪掉了 `data/` 資料夾 | ✅ 要（等於重來） |
+| 改了 schema（例如換 model 導致 `EMBEDDING_DIM` 變動） | ✅ 要，並重新 ingest |
+
+> 小提醒：`init_db.py`（初始化資料庫）和 `__init__.py`（Python 套件標記檔）是**完全不同**的東西，
+> 別搞混。`__init__.py` 只是讓資料夾變成可 import 的套件，不需要、也不會去「執行」它。
