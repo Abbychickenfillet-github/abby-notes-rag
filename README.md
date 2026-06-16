@@ -140,3 +140,25 @@ volumes:
 
 > 小提醒：`init_db.py`（初始化資料庫）和 `__init__.py`（Python 套件標記檔）是**完全不同**的東西，
 > 別搞混。`__init__.py` 只是讓資料夾變成可 import 的套件，不需要、也不會去「執行」它。
+
+### Ollama 磁碟空間不夠、下載不了，還能用問答嗎？
+
+**可以，改用 `--provider gemini` 就好，不佔本機磁碟。**
+
+`ask.py` 的問答（LLM 生成那步）支援三家 provider，差別在哪台機器跑、要不要下載模型：
+
+| provider | 需不需要下載模型 | 費用 | 怎麼設定 |
+|----------|------------------|------|----------|
+| `ollama` | ✅ 要下載到本機（佔磁碟） | 本機免費 | 需先 `ollama pull qwen2.5:7b` |
+| `gemini` | ❌ 雲端跑，不佔磁碟 | Google 免費額度 | 設環境變數 `GEMINI_API_KEY`（[aistudio.google.com](https://aistudio.google.com) 申請） |
+| `claude` | ❌ 雲端跑，不佔磁碟 | 付費（需綁卡） | 設環境變數 `ANTHROPIC_API_KEY` |
+
+磁碟不夠時的用法：
+
+```powershell
+# 在 .env 加一行（或當下 set）：GEMINI_API_KEY=你的金鑰
+python scripts\ask.py "我學過哪些程式語言？" --provider gemini
+```
+
+> 補充：**檢索本身（`search.py`、`semantic_switch.py`）跟 ollama 無關**，它們只用 bge-m3 embedder，
+> 不需要任何 LLM。受 ollama 影響的只有 `ask.py --provider ollama` 這條路。
